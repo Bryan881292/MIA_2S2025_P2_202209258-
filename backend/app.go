@@ -8,7 +8,10 @@ import (
 )
 
 type CodeExecutionRequest struct {
-	Code string `json:"code"`
+	Code          string `json:"code"`
+	FilePath      string `json:"filePath"`
+	DiskPath      string `json:"diskPath"`
+	PartitionName string `json:"partitionName"`
 }
 
 type CodeExecutionResponse struct {
@@ -19,6 +22,9 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/execute", executeCode).Methods("POST")
 	r.HandleFunc("/readmbr", ReadMBRHandler).Methods("POST")
+	r.HandleFunc("/getPathDisks", GetPathMountedDisks).Methods("GET")
+	r.HandleFunc("/getMountedPartitionsForPathDisk", GetMountedPartitionForPathDisk).Methods("POST")
+	r.HandleFunc("/readfiles", ReadFilesHandler).Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowCredentials: true,

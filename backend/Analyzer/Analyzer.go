@@ -16,6 +16,9 @@ var Salida = ""
 var LoggedPartitionID = ""
 var UserPermissions = [3]byte{'0', '0', '0'}
 
+// inicializar un array de strings para guardar los paths de los discos
+var PathDisksMounted []string
+
 func getCommandAndParams(input string) (string, string, string) {
 	reIgnorarComentarios := regexp.MustCompile(`#.*`)
 	comentario := ""
@@ -37,6 +40,7 @@ func Analyze(Script string) {
 	// leemos linea por linea del script
 	Scripts := strings.Split(Script, "\n")
 	Salida = ""
+	PathDisksMounted = []string{}
 
 	re := regexp.MustCompile(`-(\w+)(="[^"]+"|=\w+|=-\w+|=/\S+)?`)
 
@@ -288,6 +292,9 @@ func fnMount(matches [][]string) error {
 		return err
 	}
 	Salida += fmt.Sprintf("\nPartición montada con éxito en la ruta: %s", *path)
+	//agregamos las particiones montadas
+	PathDisksMounted = append(PathDisksMounted, *path)
+	fmt.Println("PathDisksMounted: ", PathDisksMounted)
 	return nil
 }
 
